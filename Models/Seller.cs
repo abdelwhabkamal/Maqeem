@@ -7,7 +7,7 @@ namespace Maqeem.Models
     public class Seller
     {
         [Key]
-        public int SellerID { get; set; }
+        public uint SellerID { get; set; }
 
         [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
         public string SellerName { get; set; }

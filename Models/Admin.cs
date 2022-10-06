@@ -8,7 +8,7 @@ namespace Maqeem.Models
     public class Admin
     {
         [Key]
-        public int AdminID { get; set; }
+        public uint AdminID { get; set; }
        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
         public string? AdminName { get; set; }
         [ForeignKey("SellerID")]

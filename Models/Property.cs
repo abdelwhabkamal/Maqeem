@@ -1,17 +1,31 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace Maqeem.Models
 {
     public class Property
     {
-        public int PropertyID { get; set; }
+        [Key]
+        public uint PropertyID { get; set; }
+
+        [Required(ErrorMessage="Please enter your name"),MaxLength(100)]
         public string Location { get; set; }
+
+        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
         public string GoogleMapsLink { get; set; }
+        
+        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]        
         public string ImageLink { get; set; }
-        public int Area { get; set; }
-        public int Price { get; set; }
-        public int BedsNum { get; set; }
-        public int RoomsNum { get; set; }
-        public int PathsNum { get; set; }
+        [Required]
+        public uint Area { get; set; }
+        [Required]
+        public uint Price { get; set; }
+        [Required]
+        public uint BedsNum { get; set; }
+        [Required]
+        public uint RoomsNum { get; set; }
+        [Required]
+        public uint PathsNum { get; set; }
 
         public Deal Deal { get; set; }
         public IEnumerable<CategoryGroup> CategoryGroups { get; set; }

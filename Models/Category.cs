@@ -7,7 +7,7 @@ namespace Maqeem.Models
     public class Category
     {
         [Key]
-        public int CategoryID { get; set; }
+        public uint CategoryID { get; set; }
 
         [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
         public string CategoryName { get; set; }
