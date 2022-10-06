@@ -8,6 +8,7 @@ namespace Maqeem.Models
     {
         [Key]
         public uint DealID { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:DD.MM.YYYY}")]
         public DateTime Date { get; set; }
        

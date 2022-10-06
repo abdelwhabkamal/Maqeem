@@ -11,6 +11,7 @@ namespace Maqeem.Models
         public uint AdminID { get; set; }
        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
         public string? AdminName { get; set; }
+
         [ForeignKey("SellerID")]
         public IEnumerable<Seller> Sellers { get; set; }
         [ForeignKey("BuyerID")]

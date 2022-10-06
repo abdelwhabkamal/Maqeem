@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maqeem.Models
 {
@@ -28,6 +29,7 @@ namespace Maqeem.Models
         public uint PathsNum { get; set; }
 
         public Deal Deal { get; set; }
+        [ForeignKey("CategoryGroupID")]
         public IEnumerable<CategoryGroup> CategoryGroups { get; set; }
         public Country Country { get; set; }
     }

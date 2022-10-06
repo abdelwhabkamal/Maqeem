@@ -18,13 +18,11 @@ namespace Maqeem.Models
         [Required(ErrorMessage="Please enter your email"),RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Your Email is not valid.")]
         public string BuyerEmail { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:###-###-####}")]
         public string PhoneNum { get; set; }
 
         [Required(ErrorMessage ="Please enter your nationalID"),]
         public ulong NationalID { get; set; }
 
-        [ForeignKey("AdminID")]
         public Admin Admin { get; set; }
 
         [ForeignKey("DealsID")]
