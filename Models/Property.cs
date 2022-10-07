@@ -6,16 +6,15 @@ namespace Maqeem.Models
 {
     public class Property
     {
-        [Key]
         public uint PropertyID { get; set; }
 
-        [Required(ErrorMessage="Please enter your name"),MaxLength(100)]
+        [Required(ErrorMessage="Please enter Location of the property"),MaxLength(100)]
         public string Location { get; set; }
 
-        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
-        public string GoogleMapsLink { get; set; }
+        [MaxLength(50)]
+        public string? GoogleMapsLink { get; set; }
         
-        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]        
+        [Required(ErrorMessage="Please enter Image of the Property"),MaxLength(50)]        
         public string ImageLink { get; set; }
         [Required]
         public uint Area { get; set; }
@@ -29,7 +28,6 @@ namespace Maqeem.Models
         public uint PathsNum { get; set; }
 
         public Deal Deal { get; set; }
-        [ForeignKey("CategoryGroupID")]
         public IEnumerable<CategoryGroup> CategoryGroups { get; set; }
         public Country Country { get; set; }
     }

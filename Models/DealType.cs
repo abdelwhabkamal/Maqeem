@@ -5,10 +5,11 @@ namespace Maqeem.Models
 {
     public class DealType
     {
-        [Required(ErrorMessage="Please enter your name"),MaxLength(100)]
+        public int DealTypeID { get; set; }
+        [Required(ErrorMessage="Please enter Type of the deal(Rental or Purchase)"),MaxLength(100)]
         public string Type { get; set; }
 
-        public Deal Deal { get; set; }
+        public IEnumerable<Deal> Deals { get; set; }
     }
 }
 

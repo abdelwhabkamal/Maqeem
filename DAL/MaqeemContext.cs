@@ -1,15 +1,17 @@
 ﻿using System.Configuration;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using Maqeem.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Maqeem.DAL
 {
     public class MaqeemContext:DbContext
     {
-        public MaqeemContext() : base("MaqeemContext")
+        public MaqeemContext(DbContextOptions<MaqeemContext> options) : base(options)
         {
         }
+
+
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -19,10 +21,5 @@ namespace Maqeem.DAL
         public DbSet<Deal> Deals { get; set; }
         public DbSet<DealType> DealTypes { get; set; }
         public DbSet<Property> Properties { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-        }
     }
 }

@@ -6,19 +6,16 @@ namespace Maqeem.Models
 {
     public class Deal
     {
-        [Key]
         public uint DealID { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:DD.MM.YYYY}")]
+        [Required(ErrorMessage ="Please enter Deal date"),DisplayFormat(DataFormatString = "{0:DD.MM.YYYY}")]
         public DateTime Date { get; set; }
-       
+        [Required(ErrorMessage ="Please Enter Property's price")]
         public uint Price { get; set; }
-        [ForeignKey("SellerID")]
-        public IEnumerable<Seller> Sellers { get; set; }
-        [ForeignKey("BuyerID")]
-        public IEnumerable<Buyer> Buyers { get; set; }
-        [ForeignKey("DealTypeID")]
-        public IEnumerable<DealType> DealTypes { get; set; }
+
+        public Seller Seller { get; set; }
+        public Buyer Buyer { get; set; }
+        public DealType DealType { get; set; }
     }
 }
 

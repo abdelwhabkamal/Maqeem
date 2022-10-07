@@ -6,9 +6,9 @@ namespace Maqeem.Models
 {
     public class CategoryGroup
     {
-        [Key,ForeignKey("PropertyID")]
+        public int CategoryGroupID { get; set; }
+        
         public Property Property { get; set; }
-        [Key,ForeignKey("CategoryID")]
         public Category Category { get; set; }
     }
 }

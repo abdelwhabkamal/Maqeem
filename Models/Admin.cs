@@ -4,18 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maqeem.Models
 {
-    [Table("Admin")]
     public class Admin
     {
-        [Key]
         public uint AdminID { get; set; }
-       [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
+        [Required(ErrorMessage="Please enter your Name"),MaxLength(50)]
         public string? AdminName { get; set; }
 
-        [ForeignKey("SellerID")]
-        public IEnumerable<Seller> Sellers { get; set; }
-        [ForeignKey("BuyerID")]
-        public IEnumerable<Buyer> Buyers { get; set; }
+        public virtual IEnumerable<Seller> Sellers { get; set; }
+        public virtual IEnumerable<Buyer> Buyers { get; set; }
     }
 }
 

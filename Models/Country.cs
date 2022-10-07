@@ -6,11 +6,10 @@ namespace Maqeem.Models
 {
     public class Country
     {
-        [Key]
         public uint CountryID { get; set; }
-        [Required(ErrorMessage="Please enter your name"),MaxLength(50)]
-        public string CategoryName { get; set; }
-        [ForeignKey("PropertiesID")]
+        [Required(ErrorMessage="Please enter Country Name"),MaxLength(50),MinLength(3)]
+        public string CountryName { get; set; }
+
         public IEnumerable<Property> Properties { get; set; }
     }
 }
