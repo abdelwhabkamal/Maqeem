@@ -11,15 +11,16 @@ namespace Maqeem.DAL
         {
         }
 
+        public virtual DbSet<Admin>? Admins { get; set; }
+        public virtual DbSet<Buyer>? Buyers { get; set; }
+        public virtual DbSet<Category>? Categories { get; set; }
+        public virtual DbSet<Seller>? Sellers { get; set; }
+        public virtual DbSet<CategoryGroup>? CategoryGroups { get; set; }
+        public virtual DbSet<Country>? Countries { get; set; }
+        public virtual DbSet<Deal>? Deals { get; set; }
+        public virtual DbSet<DealType>? DealTypes { get; set; }
+        public virtual DbSet<Property>? Properties { get; set; }
+        public virtual DbSet<Images>? Images { get; set; }
 
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<Buyer> Buyers { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Seller> Sellers { get; set; }
-        public DbSet<CategoryGroup> CategoryGroups { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Deal> Deals { get; set; }
-        public DbSet<DealType> DealTypes { get; set; }
-        public DbSet<Property> Properties { get; set; }
     }
 }

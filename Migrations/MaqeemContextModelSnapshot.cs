@@ -17,7 +17,7 @@ namespace Maqeem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -104,10 +104,10 @@ namespace Maqeem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryGroupID"), 1L, 1);
 
-                    b.Property<long>("CategoryID")
+                    b.Property<long?>("CategoryID")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PropertyID")
+                    b.Property<long?>("PropertyID")
                         .HasColumnType("bigint");
 
                     b.HasKey("CategoryGroupID");
@@ -151,8 +151,8 @@ namespace Maqeem.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DealTypeID")
-                        .HasColumnType("int");
+                    b.Property<long>("DealTypeID")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
@@ -173,11 +173,11 @@ namespace Maqeem.Migrations
 
             modelBuilder.Entity("Maqeem.Models.DealType", b =>
                 {
-                    b.Property<int>("DealTypeID")
+                    b.Property<long>("DealTypeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DealTypeID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DealTypeID"), 1L, 1);
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -187,6 +187,28 @@ namespace Maqeem.Migrations
                     b.HasKey("DealTypeID");
 
                     b.ToTable("DealTypes");
+                });
+
+            modelBuilder.Entity("Maqeem.Models.Images", b =>
+                {
+                    b.Property<long>("ImagesID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ImagesID"), 1L, 1);
+
+                    b.Property<string>("ImageLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("PropertyID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ImagesID");
+
+                    b.HasIndex("PropertyID");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Maqeem.Models.Property", b =>
@@ -203,20 +225,14 @@ namespace Maqeem.Migrations
                     b.Property<long>("BedsNum")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CountryID")
+                    b.Property<long?>("CountryID")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("DealID")
+                    b.Property<long>("DealTypeID")
                         .HasColumnType("bigint");
 
                     b.Property<string>("GoogleMapsLink")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ImageLink")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -236,7 +252,7 @@ namespace Maqeem.Migrations
 
                     b.HasIndex("CountryID");
 
-                    b.HasIndex("DealID");
+                    b.HasIndex("DealTypeID");
 
                     b.ToTable("Properties");
                 });
@@ -294,15 +310,11 @@ namespace Maqeem.Migrations
                 {
                     b.HasOne("Maqeem.Models.Category", "Category")
                         .WithMany("CategoryGroups")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryID");
 
                     b.HasOne("Maqeem.Models.Property", "Property")
                         .WithMany("CategoryGroups")
-                        .HasForeignKey("PropertyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PropertyID");
 
                     b.Navigation("Category");
 
@@ -336,23 +348,30 @@ namespace Maqeem.Migrations
                     b.Navigation("Seller");
                 });
 
+            modelBuilder.Entity("Maqeem.Models.Images", b =>
+                {
+                    b.HasOne("Maqeem.Models.Property", "Property")
+                        .WithMany("Images")
+                        .HasForeignKey("PropertyID");
+
+                    b.Navigation("Property");
+                });
+
             modelBuilder.Entity("Maqeem.Models.Property", b =>
                 {
                     b.HasOne("Maqeem.Models.Country", "Country")
                         .WithMany("Properties")
-                        .HasForeignKey("CountryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryID");
 
-                    b.HasOne("Maqeem.Models.Deal", "Deal")
-                        .WithMany()
-                        .HasForeignKey("DealID")
+                    b.HasOne("Maqeem.Models.DealType", "DealType")
+                        .WithMany("Properties")
+                        .HasForeignKey("DealTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Country");
 
-                    b.Navigation("Deal");
+                    b.Navigation("DealType");
                 });
 
             modelBuilder.Entity("Maqeem.Models.Seller", b =>
@@ -391,11 +410,15 @@ namespace Maqeem.Migrations
             modelBuilder.Entity("Maqeem.Models.DealType", b =>
                 {
                     b.Navigation("Deals");
+
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Maqeem.Models.Property", b =>
                 {
                     b.Navigation("CategoryGroups");
+
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Maqeem.Models.Seller", b =>

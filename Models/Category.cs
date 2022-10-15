@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Maqeem.Models
 {
@@ -9,9 +8,10 @@ namespace Maqeem.Models
         public uint CategoryID { get; set; }
 
         [Required(ErrorMessage="Please enter Category Name"),MaxLength(50)]
-        public string CategoryName { get; set; }
+        public string? CategoryName { get; set; }
 
-        public IEnumerable<CategoryGroup> CategoryGroups { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<CategoryGroup>? CategoryGroups { get; set; }
     }
 }
 

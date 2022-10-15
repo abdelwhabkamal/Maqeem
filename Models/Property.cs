@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Maqeem.Models
 {
@@ -9,13 +8,10 @@ namespace Maqeem.Models
         public uint PropertyID { get; set; }
 
         [Required(ErrorMessage="Please enter Location of the property"),MaxLength(100)]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
-        [MaxLength(50)]
         public string? GoogleMapsLink { get; set; }
         
-        [Required(ErrorMessage="Please enter Image of the Property"),MaxLength(50)]        
-        public string ImageLink { get; set; }
         [Required]
         public uint Area { get; set; }
         [Required]
@@ -27,9 +23,15 @@ namespace Maqeem.Models
         [Required]
         public uint PathsNum { get; set; }
 
-        public Deal Deal { get; set; }
-        public IEnumerable<CategoryGroup> CategoryGroups { get; set; }
-        public Country Country { get; set; }
+        public uint DealTypeID { get; set; }
+        [JsonIgnore]
+        public virtual DealType? DealType { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<CategoryGroup>? CategoryGroups { get; set; }
+        [JsonIgnore]
+        public virtual Country? Country { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<Images>? Images { get; set; }
     }
 }
 

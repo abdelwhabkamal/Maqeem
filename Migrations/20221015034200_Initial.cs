@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Maqeem.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,7 +52,7 @@ namespace Maqeem.Migrations
                 name: "DealTypes",
                 columns: table => new
                 {
-                    DealTypeID = table.Column<int>(type: "int", nullable: false)
+                    DealTypeID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -110,6 +110,38 @@ namespace Maqeem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Properties",
+                columns: table => new
+                {
+                    PropertyID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GoogleMapsLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Area = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    BedsNum = table.Column<long>(type: "bigint", nullable: false),
+                    RoomsNum = table.Column<long>(type: "bigint", nullable: false),
+                    PathsNum = table.Column<long>(type: "bigint", nullable: false),
+                    DealTypeID = table.Column<long>(type: "bigint", nullable: false),
+                    CountryID = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Properties", x => x.PropertyID);
+                    table.ForeignKey(
+                        name: "FK_Properties_Countries_CountryID",
+                        column: x => x.CountryID,
+                        principalTable: "Countries",
+                        principalColumn: "CountryID");
+                    table.ForeignKey(
+                        name: "FK_Properties_DealTypes_DealTypeID",
+                        column: x => x.DealTypeID,
+                        principalTable: "DealTypes",
+                        principalColumn: "DealTypeID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Deals",
                 columns: table => new
                 {
@@ -119,7 +151,7 @@ namespace Maqeem.Migrations
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     SellerID = table.Column<long>(type: "bigint", nullable: false),
                     BuyerID = table.Column<long>(type: "bigint", nullable: false),
-                    DealTypeID = table.Column<int>(type: "int", nullable: false)
+                    DealTypeID = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,47 +177,13 @@ namespace Maqeem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Properties",
-                columns: table => new
-                {
-                    PropertyID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    GoogleMapsLink = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ImageLink = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Area = table.Column<long>(type: "bigint", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
-                    BedsNum = table.Column<long>(type: "bigint", nullable: false),
-                    RoomsNum = table.Column<long>(type: "bigint", nullable: false),
-                    PathsNum = table.Column<long>(type: "bigint", nullable: false),
-                    DealID = table.Column<long>(type: "bigint", nullable: false),
-                    CountryID = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Properties", x => x.PropertyID);
-                    table.ForeignKey(
-                        name: "FK_Properties_Countries_CountryID",
-                        column: x => x.CountryID,
-                        principalTable: "Countries",
-                        principalColumn: "CountryID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Properties_Deals_DealID",
-                        column: x => x.DealID,
-                        principalTable: "Deals",
-                        principalColumn: "DealID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CategoryGroups",
                 columns: table => new
                 {
                     CategoryGroupID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PropertyID = table.Column<long>(type: "bigint", nullable: false),
-                    CategoryID = table.Column<long>(type: "bigint", nullable: false)
+                    PropertyID = table.Column<long>(type: "bigint", nullable: true),
+                    CategoryID = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,14 +192,31 @@ namespace Maqeem.Migrations
                         name: "FK_CategoryGroups_Categories_CategoryID",
                         column: x => x.CategoryID,
                         principalTable: "Categories",
-                        principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryID");
                     table.ForeignKey(
                         name: "FK_CategoryGroups_Properties_PropertyID",
                         column: x => x.PropertyID,
                         principalTable: "Properties",
-                        principalColumn: "PropertyID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PropertyID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ImagesID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PropertyID = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ImagesID);
+                    table.ForeignKey(
+                        name: "FK_Images_Properties_PropertyID",
+                        column: x => x.PropertyID,
+                        principalTable: "Properties",
+                        principalColumn: "PropertyID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -235,14 +250,19 @@ namespace Maqeem.Migrations
                 column: "SellerID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_PropertyID",
+                table: "Images",
+                column: "PropertyID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Properties_CountryID",
                 table: "Properties",
                 column: "CountryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Properties_DealID",
+                name: "IX_Properties_DealTypeID",
                 table: "Properties",
-                column: "DealID");
+                column: "DealTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sellers_AdminID",
@@ -256,28 +276,31 @@ namespace Maqeem.Migrations
                 name: "CategoryGroups");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Properties");
-
-            migrationBuilder.DropTable(
-                name: "Countries");
-
-            migrationBuilder.DropTable(
                 name: "Deals");
+
+            migrationBuilder.DropTable(
+                name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Buyers");
 
             migrationBuilder.DropTable(
-                name: "DealTypes");
-
-            migrationBuilder.DropTable(
                 name: "Sellers");
 
             migrationBuilder.DropTable(
+                name: "Properties");
+
+            migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
+
+            migrationBuilder.DropTable(
+                name: "DealTypes");
         }
     }
 }
