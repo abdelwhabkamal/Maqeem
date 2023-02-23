@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Maqeem.Models
+namespace Maskan.Models
 {
     public class Property
     {
@@ -21,7 +21,7 @@ namespace Maqeem.Models
         [Required]
         public uint RoomsNum { get; set; }
         [Required]
-        public uint PathsNum { get; set; }
+        public uint BathsNum { get; set; }
 
         public uint DealTypeID { get; set; }
         [JsonIgnore]

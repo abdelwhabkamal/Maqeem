@@ -1,4 +1,4 @@
-﻿namespace Maqeem.Models
+﻿namespace Maskan.Models
 {
     public class CategoryGroup
     {

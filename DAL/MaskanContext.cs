@@ -1,13 +1,13 @@
 ﻿using System.Configuration;
-using Maqeem.Models;
+using Maskan.Models;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Maqeem.DAL
+namespace Maskan.DAL
 {
-    public class MaqeemContext:DbContext
+    public class MaskanContext:DbContext
     {
-        public MaqeemContext(DbContextOptions<MaqeemContext> options) : base(options)
+        public MaskanContext(DbContextOptions<MaskanContext> options) : base(options)
         {
         }
 

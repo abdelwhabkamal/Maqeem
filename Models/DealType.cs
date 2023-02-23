@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Maqeem.Models
+namespace Maskan.Models
 {
     public class DealType
     {

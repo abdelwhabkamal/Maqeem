@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Maqeem.DAL;
-using Maqeem.Models;
+using Maskan.DAL;
+using Maskan.Models;
 
-namespace Maqeem.Controllers
+namespace Maskan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly MaqeemContext _context;
+        private readonly MaskanContext _context;
 
-        public CategoryController(MaqeemContext context)
+        public CategoryController(MaskanContext context)
         {
             _context = context;
         }
@@ -88,7 +88,7 @@ namespace Maqeem.Controllers
         {
           if (_context.Categories == null)
           {
-              return Problem("Entity set 'MaqeemContext.Categories'  is null.");
+              return Problem("Entity set 'MaskanContext.Categories'  is null.");
           }
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();

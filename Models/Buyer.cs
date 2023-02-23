@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace Maqeem.Models
+namespace Maskan.Models
 {
     public class Buyer
     {

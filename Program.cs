@@ -1,4 +1,4 @@
-﻿using Maqeem.DAL;
+﻿using Maskan.DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +10,7 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<MaqeemContext>(
+builder.Services.AddDbContext<MaskanContext>(
     options =>
         options.UseLazyLoadingProxies()
         .UseSqlServer(builder.Configuration.GetConnectionString("MyConn"))

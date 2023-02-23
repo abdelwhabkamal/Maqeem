@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Maqeem.Models
+namespace Maskan.Models
 {
     public class Category
     {

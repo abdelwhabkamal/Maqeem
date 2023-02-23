@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Maqeem.DAL;
-using Maqeem.Models;
+using Maskan.DAL;
+using Maskan.Models;
 
-namespace Maqeem.Controllers
+namespace Maskan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class SellerController : ControllerBase
     {
-        private readonly MaqeemContext _context;
+        private readonly MaskanContext _context;
 
-        public SellerController(MaqeemContext context)
+        public SellerController(MaskanContext context)
         {
             _context = context;
         }
@@ -88,7 +88,7 @@ namespace Maqeem.Controllers
         {
           if (_context.Sellers == null)
           {
-              return Problem("Entity set 'MaqeemContext.Sellers'  is null.");
+              return Problem("Entity set 'MaskanContext.Sellers'  is null.");
           }
             _context.Sellers.Add(seller);
             await _context.SaveChangesAsync();

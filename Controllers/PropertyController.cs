@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Maqeem.DAL;
-using Maqeem.Models;
+using Maskan.DAL;
+using Maskan.Models;
 
-namespace Maqeem.Controllers
+namespace Maskan.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[Controller]/[Action]")]
     [ApiController]
     public class PropertyController : ControllerBase
     {
-        private readonly MaqeemContext _context;
+        private readonly MaskanContext _context;
 
-        public PropertyController(MaqeemContext context)
+        public PropertyController(MaskanContext context)
         {
             _context = context;
         }
@@ -36,10 +36,10 @@ namespace Maqeem.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(uint id)
         {
-          if (_context.Properties == null)
-          {
-              return NotFound();
-          }
+            if (_context.Properties == null)
+            {
+                return NotFound();
+            }
             var @property = await _context.Properties.FindAsync(id);
 
             if (@property == null)
@@ -48,6 +48,45 @@ namespace Maqeem.Controllers
             }
 
             return @property;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch)
+        {
+            if (_context.Properties == null)
+            {
+                return NotFound();
+            }
+            var Property = await _context.Properties.ToListAsync();
+            if (filterSearch.DealType != null) 
+	        {
+                Property = Property.Where(i => i.DealType == filterSearch.DealType).ToList();
+	        }
+            if (filterSearch.City != null)
+            {
+                Property = Property.Where(i => i.Country.CountryName == filterSearch.City).ToList();
+            }
+            if (filterSearch.Category != null)
+            {
+                Property = Property.Where(i => i.CategoryGroups.Where(c=>c.Category.CategoryName==filterSearch.Category)!=null).ToList();
+            }
+            if (filterSearch.BedsNum != 0)
+            {
+                Property = Property.Where(i => i.BedsNum == filterSearch.BedsNum).ToList();
+            }
+            if (filterSearch.BathsNum != 0)
+            {
+                Property = Property.Where(i => i.BathsNum == filterSearch.BathsNum).ToList();
+            }
+            if (filterSearch.Price != 0)
+            {
+                Property = Property.Where(i => i.Price == filterSearch.Price).ToList();
+            }
+            if (filterSearch.Area != 0)
+            {
+                Property = Property.Where(i => i.Area == filterSearch.Area).ToList();
+            }
+            return Property;
         }
 
         // PUT: api/Property/5
@@ -88,7 +127,7 @@ namespace Maqeem.Controllers
         {
           if (_context.Properties == null)
           {
-              return Problem("Entity set 'MaqeemContext.Properties'  is null.");
+              return Problem("Entity set 'MaskanContext.Properties'  is null.");
           }
             _context.Properties.Add(@property);
             await _context.SaveChangesAsync();
