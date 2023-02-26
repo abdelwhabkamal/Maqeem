@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Maskan.DAL;
 using Maskan.Models;
+using System.Text.Json;
 
 namespace Maqeem.Controllers
 {
@@ -23,13 +24,20 @@ namespace Maqeem.Controllers
 
         // GET: api/Buyer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Buyer>>> GetBuyers()
+        public async Task<ActionResult<IEnumerable<Buyer>>> GetBuyers(PaginationParams @params)
         {
           if (_context.Buyers == null)
           {
               return NotFound();
           }
-            return await _context.Buyers.ToListAsync();
+            var Buyers = _context.Buyers;
+            var PaginationMetaData = new PaginationMetaData(@params.page, Buyers.Count(), @params.ItemsPerPage);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+            var items = await Buyers
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage)
+                            .ToListAsync();
+            return items;
         }
 
         // GET: api/Buyer/5

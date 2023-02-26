@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Maskan.DAL;
 using Maskan.Models;
+using System.Text.Json;
 
 namespace Maskan.Controllers
 {
@@ -23,13 +24,20 @@ namespace Maskan.Controllers
 
         // GET: api/Property
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(PaginationParams @params)
         {
-          if (_context.Properties == null)
-          {
-              return NotFound();
-          }
-            return await _context.Properties.ToListAsync();
+            if (_context.Properties == null)
+            {
+                return NotFound();
+            }
+            var Properties= _context.Properties;
+            var PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+            var items=await Properties
+		                    .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage)
+                            .ToListAsync();
+            return items;
         }
 
         // GET: api/Property/5
@@ -51,42 +59,82 @@ namespace Maskan.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch)
+        public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch, PaginationParams @params)
         {
             if (_context.Properties == null)
             {
                 return NotFound();
             }
             var Property = await _context.Properties.ToListAsync();
+            var PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+            var items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             if (filterSearch.DealType != null) 
 	        {
                 Property = Property.Where(i => i.DealType == filterSearch.DealType).ToList();
-	        }
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
+            }
             if (filterSearch.City != null)
             {
                 Property = Property.Where(i => i.Country.CountryName == filterSearch.City).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Category != null)
             {
                 Property = Property.Where(i => i.CategoryGroups.Where(c=>c.Category.CategoryName==filterSearch.Category)!=null).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.BedsNum != 0)
             {
                 Property = Property.Where(i => i.BedsNum == filterSearch.BedsNum).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.BathsNum != 0)
             {
                 Property = Property.Where(i => i.BathsNum == filterSearch.BathsNum).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Price != 0)
             {
                 Property = Property.Where(i => i.Price == filterSearch.Price).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Area != 0)
             {
                 Property = Property.Where(i => i.Area == filterSearch.Area).ToList();
+                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+                items = Property
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage).ToList();
             }
-            return Property;
+            return items;
         }
 
         // PUT: api/Property/5

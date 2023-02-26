@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Maskan.DAL;
 using Maskan.Models;
+using System.Text.Json;
 
 namespace Maskan.Controllers
 {
@@ -23,13 +24,20 @@ namespace Maskan.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories(PaginationParams @params)
         {
           if (_context.Categories == null)
           {
               return NotFound();
           }
-            return await _context.Categories.ToListAsync();
+            var Categories = _context.Categories;
+            var PaginationMetaData = new PaginationMetaData(@params.page, Categories.Count(), @params.ItemsPerPage);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
+            var items = await Categories
+                            .Skip((@params.page - 1) * @params.ItemsPerPage)
+                            .Take(@params.ItemsPerPage)
+                            .ToListAsync();
+            return items;
         }
 
         // GET: api/Category/5
