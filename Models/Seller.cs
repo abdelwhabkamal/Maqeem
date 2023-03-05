@@ -21,9 +21,6 @@ namespace Maskan.Models
         [Required(ErrorMessage ="Please enter your National ID")]
         public ulong NationalID { get; set; }
 
-        public uint AdminID { get; set; }
-        [JsonIgnore]
-        public virtual Admin? Admin { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Deal>? Deals { get; set; }
     }
