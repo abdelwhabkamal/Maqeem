@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Maskan.DAL;
 using Maskan.Models;
 using System.Text.Json;
+using Python.Runtime;
 
 namespace Maskan.Controllers
 {
@@ -53,6 +54,7 @@ namespace Maskan.Controllers
             return @property;
         }
 
+        //There is error here 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch, PaginationParams @params)
         {
@@ -197,6 +199,23 @@ namespace Maskan.Controllers
 
             return NoContent();
         }
+
+        [HttpGet]
+        public int PredictPrice(Property property)
+        {
+            using (Py.GIL())
+            {
+                dynamic np = Py.Import("numpy");
+                dynamic model = Py.Import("../Assets/Price Prediction/House-Price-Prediction.py");
+                dynamic predictFn = model.predict;
+                dynamic input = np.array(new[] { property.Type,property.Area,property.BedsNum,property.BathsNum,property.Level,
+																	property.DealTypeID,property.Country?.CountryID });
+                dynamic output = predictFn(input);
+                return Ok(output);
+            }
+	    }
+
+
 
         private bool PropertyExists(uint id)
         {

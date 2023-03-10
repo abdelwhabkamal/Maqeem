@@ -22,6 +22,10 @@ namespace Maskan.Models
         public uint RoomsNum { get; set; }
         [Required]
         public uint BathsNum { get; set; }
+        [Required]
+        public uint Type { get; set; }
+        [Required]
+        public uint Level { get; set; }
 
         public uint DealTypeID { get; set; }
         [JsonIgnore]
