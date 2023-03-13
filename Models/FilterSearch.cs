@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
 namespace Maskan.Models
 {
 	public class FilterSearch
 	{
-		public DealType DealType { get; set; }
+        public uint DealTypeID { get; set; }
+		[JsonIgnore]
+        public DealType DealType { get; set; }
 		public string City { get; set; }
 		public string Category { get; set; }
 		public int BedsNum { get; set; }

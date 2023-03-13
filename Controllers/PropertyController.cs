@@ -4,6 +4,7 @@ using Maskan.DAL;
 using Maskan.Models;
 using System.Text.Json;
 using Python.Runtime;
+using ConsoleApp4;
 
 namespace Maskan.Controllers
 {
@@ -20,7 +21,7 @@ namespace Maskan.Controllers
 
         // GET: api/Property
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties(PaginationParams @params)
+        public async Task<ActionResult<IEnumerable<Property>>> GetProperties([FromQuery]PaginationParams @params)
         {
             if (_context.Properties == null)
             {
@@ -54,80 +55,79 @@ namespace Maskan.Controllers
             return @property;
         }
 
-        //There is error here 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch, PaginationParams @params)
+        public async Task<ActionResult<IEnumerable<Property>>> GetCategorizedProperty(FilterSearch filterSearch,[FromQuery] PaginationParams @params)
         {
             if (_context.Properties == null)
             {
                 return NotFound();
             }
-            var Property = await _context.Properties.ToListAsync();
-            var PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+            var Properties = _context.Properties;
+            var PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-            var items = Property
-                            .Skip((@params.page - 1) * @params.ItemsPerPage)
-                            .Take(@params.ItemsPerPage).ToList();
+            var items = await Properties
+		                        .Skip((@params.page - 1) * @params.ItemsPerPage)
+                                .Take(@params.ItemsPerPage).ToListAsync();
             if (filterSearch.DealType != null) 
 	        {
-                Property = Property.Where(i => i.DealType == filterSearch.DealType).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.DealType == filterSearch.DealType);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.City != null)
             {
-                Property = Property.Where(i => i.Country.CountryName == filterSearch.City).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.Country.CountryName == filterSearch.City);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Category != null)
             {
-                Property = Property.Where(i => i.CategoryGroups.Where(c=>c.Category.CategoryName==filterSearch.Category)!=null).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.CategoryGroups.Where(c=>c.Category.CategoryName==filterSearch.Category)!=null);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.BedsNum != 0)
             {
-                Property = Property.Where(i => i.BedsNum == filterSearch.BedsNum).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.BedsNum == filterSearch.BedsNum);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.BathsNum != 0)
             {
-                Property = Property.Where(i => i.BathsNum == filterSearch.BathsNum).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.BathsNum == filterSearch.BathsNum);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Price != 0)
             {
-                Property = Property.Where(i => i.Price == filterSearch.Price).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.Price == filterSearch.Price);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
             if (filterSearch.Area != 0)
             {
-                Property = Property.Where(i => i.Area == filterSearch.Area).ToList();
-                PaginationMetaData = new PaginationMetaData(@params.page, Property.Count(), @params.ItemsPerPage);
+                Properties = (DbSet<Property>)Properties.Where(i => i.Area == filterSearch.Area);
+                PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-                items = Property
+                items = Properties
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
@@ -200,10 +200,10 @@ namespace Maskan.Controllers
             return NoContent();
         }
 
-        [HttpGet]
-        public int PredictPrice(Property property)
+        [HttpPost]
+        public MLModel1.ModelOutput PredictPrice(ModelInput property)
         {
-            using (Py.GIL())
+            /**using (Py.GIL())
             {
                 dynamic np = Py.Import("numpy");
                 dynamic model = Py.Import("../Assets/Price Prediction/House-Price-Prediction.py");
@@ -212,7 +212,21 @@ namespace Maskan.Controllers
 																	property.DealTypeID,property.Country?.CountryID });
                 dynamic output = predictFn(input);
                 return Ok(output);
-            }
+            }*/
+            var SampleData = new MLModel1.ModelInput()
+            {
+                Type = property.Type,
+                Area = property.Area,
+                Bedrooms = property.RoomsNum,
+                Bathrooms = property.BathsNum,
+                Level = property.Level,
+                Furnished = property.Furnished,
+                Rent = property.DealTypeID,
+                City = property.Location,
+                Region = property.Region
+            };
+            var Result = MLModel1.Predict(SampleData);
+            return Result;
 	    }
 
 

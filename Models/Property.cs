@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Maskan.Models
 {
@@ -26,6 +26,10 @@ namespace Maskan.Models
         public uint Type { get; set; }
         [Required]
         public uint Level { get; set; }
+        [Required]
+        public uint Furnished { get; set; }
+        [Required]
+        public uint Region { get; set; }
 
         public uint DealTypeID { get; set; }
         [JsonIgnore]
