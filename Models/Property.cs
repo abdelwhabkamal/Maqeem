@@ -40,6 +40,7 @@ namespace Maskan.Models
         public virtual Country? Country { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Images>? Images { get; set; }
+        public string? VrLink { get; set; }
     }
 }
 
