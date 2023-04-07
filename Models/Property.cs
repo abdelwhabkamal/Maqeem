@@ -23,21 +23,21 @@ namespace Maskan.Models
         [Required]
         public uint BathsNum { get; set; }
         [Required]
-        public uint Type { get; set; }
+        public string Type { get; set; }
         [Required]
         public uint Level { get; set; }
         [Required]
-        public uint Furnished { get; set; }
+        public Boolean Furnished { get; set; }
         [Required]
-        public uint Region { get; set; }
+        public string Region { get; set; }
 
         public uint DealTypeID { get; set; }
         [JsonIgnore]
         public virtual DealType? DealType { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<CategoryGroup>? CategoryGroups { get; set; }
-        [JsonIgnore]
-        public virtual Country? Country { get; set; }
+        [Required]
+        public string address { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Images>? Images { get; set; }
         public string? VrLink { get; set; }

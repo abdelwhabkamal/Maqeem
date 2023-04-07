@@ -5,8 +5,7 @@ namespace Maskan.Models
 {
 	public class ModelInput
 	{
-        [Required(ErrorMessage = "Please enter Location of the property"), MaxLength(100)]
-        public string? Location { get; set; }
+
         [Required]
         public uint Area { get; set; }
         [Required]
@@ -22,7 +21,7 @@ namespace Maskan.Models
         [Required]
         public uint Region { get; set; }
         [Required]
-        public uint DealTypeID { get; set; }
+        public uint DealType { get; set; }
     }
 }
 

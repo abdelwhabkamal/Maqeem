@@ -16,7 +16,6 @@ namespace Maskan.DAL
         public virtual DbSet<Category>? Categories { get; set; }
         public virtual DbSet<Seller>? Sellers { get; set; }
         public virtual DbSet<CategoryGroup>? CategoryGroups { get; set; }
-        public virtual DbSet<Country>? Countries { get; set; }
         public virtual DbSet<Deal>? Deals { get; set; }
         public virtual DbSet<DealType>? DealTypes { get; set; }
         public virtual DbSet<Property>? Properties { get; set; }

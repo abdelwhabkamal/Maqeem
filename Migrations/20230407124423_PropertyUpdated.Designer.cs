@@ -4,6 +4,7 @@ using Maskan.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Maskan.Migrations
 {
     [DbContext(typeof(MaskanContext))]
-    partial class MaskanContextModelSnapshot : ModelSnapshot
+    [Migration("20230407124423_PropertyUpdated")]
+    partial class PropertyUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +125,24 @@ namespace Maskan.Migrations
                     b.ToTable("CategoryGroups");
                 });
 
+            modelBuilder.Entity("Maskan.Models.Country", b =>
+                {
+                    b.Property<long>("CountryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CountryID"), 1L, 1);
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CountryID");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("Maskan.Models.Deal", b =>
                 {
                     b.Property<long>("DealID")
@@ -214,6 +234,9 @@ namespace Maskan.Migrations
                     b.Property<long>("BedsNum")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CountryID")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("DealTypeID")
                         .HasColumnType("bigint");
 
@@ -248,11 +271,9 @@ namespace Maskan.Migrations
                     b.Property<string>("VrLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("PropertyID");
+
+                    b.HasIndex("CountryID");
 
                     b.HasIndex("DealTypeID");
 
@@ -345,11 +366,17 @@ namespace Maskan.Migrations
 
             modelBuilder.Entity("Maskan.Models.Property", b =>
                 {
+                    b.HasOne("Maskan.Models.Country", "Country")
+                        .WithMany("Properties")
+                        .HasForeignKey("CountryID");
+
                     b.HasOne("Maskan.Models.DealType", "DealType")
                         .WithMany("Properties")
                         .HasForeignKey("DealTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Country");
 
                     b.Navigation("DealType");
                 });
@@ -362,6 +389,11 @@ namespace Maskan.Migrations
             modelBuilder.Entity("Maskan.Models.Category", b =>
                 {
                     b.Navigation("CategoryGroups");
+                });
+
+            modelBuilder.Entity("Maskan.Models.Country", b =>
+                {
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Maskan.Models.DealType", b =>

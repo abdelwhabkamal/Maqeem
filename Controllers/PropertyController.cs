@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Maskan.DAL;
 using Maskan.Models;
 using System.Text.Json;
-using Python.Runtime;
-using ConsoleApp4;
+
 
 namespace Maskan.Controllers
 {
@@ -77,7 +76,8 @@ namespace Maskan.Controllers
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
-            if (filterSearch.City != null)
+           /*
+            * if (filterSearch.City != null)
             {
                 Properties = (DbSet<Property>)Properties.Where(i => i.Country.CountryName == filterSearch.City);
                 PaginationMetaData = new PaginationMetaData(@params.page, Properties.Count(), @params.ItemsPerPage);
@@ -86,6 +86,7 @@ namespace Maskan.Controllers
                             .Skip((@params.page - 1) * @params.ItemsPerPage)
                             .Take(@params.ItemsPerPage).ToList();
             }
+           */
             if (filterSearch.Category != null)
             {
                 Properties = (DbSet<Property>)Properties.Where(i => i.CategoryGroups.Where(c=>c.Category.CategoryName==filterSearch.Category)!=null);
@@ -203,16 +204,7 @@ namespace Maskan.Controllers
         [HttpPost]
         public MLModel1.ModelOutput PredictPrice(ModelInput property)
         {
-            /**using (Py.GIL())
-            {
-                dynamic np = Py.Import("numpy");
-                dynamic model = Py.Import("../Assets/Price Prediction/House-Price-Prediction.py");
-                dynamic predictFn = model.predict;
-                dynamic input = np.array(new[] { property.Type,property.Area,property.BedsNum,property.BathsNum,property.Level,
-																	property.DealTypeID,property.Country?.CountryID });
-                dynamic output = predictFn(input);
-                return Ok(output);
-            }*/
+    
             var SampleData = new MLModel1.ModelInput()
             {
                 Type = property.Type,
@@ -221,8 +213,7 @@ namespace Maskan.Controllers
                 Bathrooms = property.BathsNum,
                 Level = property.Level,
                 Furnished = property.Furnished,
-                Rent = property.DealTypeID,
-                City = property.Location,
+                Rent = property.DealType,
                 Region = property.Region
             };
             var Result = MLModel1.Predict(SampleData);
