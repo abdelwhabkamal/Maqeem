@@ -18,6 +18,7 @@ builder.Services.AddDbContext<MaskanContext>(
         options.UseLazyLoadingProxies()
         .UseSqlServer(builder.Configuration.GetConnectionString("MyConn"))
 );
+builder.Services.AddCors();
 
 // Authorization For JWT Middelware
 var configValue = builder.Configuration.GetValue<string>("AppSettings:Token");
@@ -42,6 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
 app.UseHttpsRedirection();
 

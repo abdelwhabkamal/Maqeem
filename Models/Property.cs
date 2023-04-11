@@ -9,9 +9,7 @@ namespace Maskan.Models
 
         [Required(ErrorMessage="Please enter Location of the property"),MaxLength(100)]
         public string? Location { get; set; }
-
         public string? GoogleMapsLink { get; set; }
-        
         [Required]
         public uint Area { get; set; }
         [Required]
@@ -28,19 +26,18 @@ namespace Maskan.Models
         public uint Level { get; set; }
         [Required]
         public Boolean Furnished { get; set; }
-        [Required]
-        public string Region { get; set; }
+        public string? VrLink { get; set; }
 
         public uint DealTypeID { get; set; }
         [JsonIgnore]
         public virtual DealType? DealType { get; set; }
+        public uint SellerID { get; set; }
+        [JsonIgnore]
+        public virtual Seller? Seller { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<CategoryGroup>? CategoryGroups { get; set; }
-        [Required]
-        public string address { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Images>? Images { get; set; }
-        public string? VrLink { get; set; }
     }
 }
 

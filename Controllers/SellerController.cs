@@ -19,19 +19,14 @@ namespace Maskan.Controllers
 
         // GET: api/Seller
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Seller>>> GetSellers(PaginationParams @params)
+        public async Task<ActionResult<IEnumerable<Seller>>> GetSellers()
         {
           if (_context.Sellers == null)
           {
               return NotFound();
           }
             var Sellers = _context.Sellers;
-            var PaginationMetaData = new PaginationMetaData(@params.page, Sellers.Count(), @params.ItemsPerPage);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(PaginationMetaData));
-            var items = await Sellers
-                            .Skip((@params.page - 1) * @params.ItemsPerPage)
-                            .Take(@params.ItemsPerPage)
-                            .ToListAsync();
+            var items = await Sellers.ToListAsync();
             return items;
         }
 

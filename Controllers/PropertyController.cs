@@ -181,6 +181,18 @@ namespace Maskan.Controllers
             return CreatedAtAction("GetProperty", new { id = @property.PropertyID }, @property);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<Images>> PostImages(Images image)
+        {
+            if (_context.Images == null)
+            {
+                return Problem("Entity set 'MaskanContext.Images'  is null.");
+            }
+            _context.Images.Add(image);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetProperty", new { id = image.ImagesID }, image);
+        }
+
         // DELETE: api/Property/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProperty(uint id)
