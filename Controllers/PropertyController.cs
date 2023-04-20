@@ -17,6 +17,20 @@ namespace Maskan.Controllers
         {
             _context = context;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllProperties()
+        {
+            if (_context.Properties == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var properties = await _context.Properties.ToListAsync();
+
+                return Ok(properties);
+            }
+        }
 
         // GET: api/Property
         [HttpGet]

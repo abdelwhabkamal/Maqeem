@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Maskan.Migrations
 {
     [DbContext(typeof(MaskanContext))]
-    [Migration("20230327121112_VrLink")]
-    partial class VrLink
+    [Migration("20230418015720_final")]
+    partial class final
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,24 +125,6 @@ namespace Maskan.Migrations
                     b.ToTable("CategoryGroups");
                 });
 
-            modelBuilder.Entity("Maskan.Models.Country", b =>
-                {
-                    b.Property<long>("CountryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CountryID"), 1L, 1);
-
-                    b.Property<string>("CountryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("CountryID");
-
-                    b.ToTable("Countries");
-                });
-
             modelBuilder.Entity("Maskan.Models.Deal", b =>
                 {
                     b.Property<long>("DealID")
@@ -207,7 +189,7 @@ namespace Maskan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("PropertyID")
+                    b.Property<long>("PropertyID")
                         .HasColumnType("bigint");
 
                     b.HasKey("ImagesID");
@@ -234,14 +216,11 @@ namespace Maskan.Migrations
                     b.Property<long>("BedsNum")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CountryID")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("DealTypeID")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Furnished")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("Furnished")
+                        .HasColumnType("bit");
 
                     b.Property<string>("GoogleMapsLink")
                         .HasColumnType("nvarchar(max)");
@@ -257,23 +236,24 @@ namespace Maskan.Migrations
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Region")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("RoomsNum")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Type")
+                    b.Property<long>("SellerID")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VrLink")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PropertyID");
 
-                    b.HasIndex("CountryID");
-
                     b.HasIndex("DealTypeID");
+
+                    b.HasIndex("SellerID");
 
                     b.ToTable("Properties");
                 });
@@ -357,26 +337,30 @@ namespace Maskan.Migrations
                 {
                     b.HasOne("Maskan.Models.Property", "Property")
                         .WithMany("Images")
-                        .HasForeignKey("PropertyID");
+                        .HasForeignKey("PropertyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Property");
                 });
 
             modelBuilder.Entity("Maskan.Models.Property", b =>
                 {
-                    b.HasOne("Maskan.Models.Country", "Country")
-                        .WithMany("Properties")
-                        .HasForeignKey("CountryID");
-
                     b.HasOne("Maskan.Models.DealType", "DealType")
                         .WithMany("Properties")
                         .HasForeignKey("DealTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Country");
+                    b.HasOne("Maskan.Models.Seller", "Seller")
+                        .WithMany("Properties")
+                        .HasForeignKey("SellerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DealType");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Maskan.Models.Buyer", b =>
@@ -387,11 +371,6 @@ namespace Maskan.Migrations
             modelBuilder.Entity("Maskan.Models.Category", b =>
                 {
                     b.Navigation("CategoryGroups");
-                });
-
-            modelBuilder.Entity("Maskan.Models.Country", b =>
-                {
-                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Maskan.Models.DealType", b =>
@@ -411,6 +390,8 @@ namespace Maskan.Migrations
             modelBuilder.Entity("Maskan.Models.Seller", b =>
                 {
                     b.Navigation("Deals");
+
+                    b.Navigation("Properties");
                 });
 #pragma warning restore 612, 618
         }

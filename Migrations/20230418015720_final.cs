@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Maskan.Migrations
 {
-    public partial class initial : Migration
+    public partial class final : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,12 +17,28 @@ namespace Maskan.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AdminName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AdminEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ConfirmPassword = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Admins", x => x.AdminID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Buyers",
+                columns: table => new
+                {
+                    BuyerID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuyerName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BuyerAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    BuyerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NationalID = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Buyers", x => x.BuyerID);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,19 +55,6 @@ namespace Maskan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Countries",
-                columns: table => new
-                {
-                    CountryID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CountryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Countries", x => x.CountryID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DealTypes",
                 columns: table => new
                 {
@@ -65,30 +68,6 @@ namespace Maskan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Buyers",
-                columns: table => new
-                {
-                    BuyerID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BuyerName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    BuyerAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    BuyerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NationalID = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    AdminID = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Buyers", x => x.BuyerID);
-                    table.ForeignKey(
-                        name: "FK_Buyers_Admins_AdminID",
-                        column: x => x.AdminID,
-                        principalTable: "Admins",
-                        principalColumn: "AdminID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sellers",
                 columns: table => new
                 {
@@ -97,51 +76,12 @@ namespace Maskan.Migrations
                     SellerName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SellerAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SellerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NationalID = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    AdminID = table.Column<long>(type: "bigint", nullable: false)
+                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sellers", x => x.SellerID);
-                    table.ForeignKey(
-                        name: "FK_Sellers_Admins_AdminID",
-                        column: x => x.AdminID,
-                        principalTable: "Admins",
-                        principalColumn: "AdminID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Properties",
-                columns: table => new
-                {
-                    PropertyID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    GoogleMapsLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Area = table.Column<long>(type: "bigint", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
-                    BedsNum = table.Column<long>(type: "bigint", nullable: false),
-                    RoomsNum = table.Column<long>(type: "bigint", nullable: false),
-                    BathsNum = table.Column<long>(type: "bigint", nullable: false),
-                    DealTypeID = table.Column<long>(type: "bigint", nullable: false),
-                    CountryID = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Properties", x => x.PropertyID);
-                    table.ForeignKey(
-                        name: "FK_Properties_Countries_CountryID",
-                        column: x => x.CountryID,
-                        principalTable: "Countries",
-                        principalColumn: "CountryID");
-                    table.ForeignKey(
-                        name: "FK_Properties_DealTypes_DealTypeID",
-                        column: x => x.DealTypeID,
-                        principalTable: "DealTypes",
-                        principalColumn: "DealTypeID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,7 +116,44 @@ namespace Maskan.Migrations
                         column: x => x.SellerID,
                         principalTable: "Sellers",
                         principalColumn: "SellerID",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Properties",
+                columns: table => new
+                {
+                    PropertyID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GoogleMapsLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Area = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    BedsNum = table.Column<long>(type: "bigint", nullable: false),
+                    RoomsNum = table.Column<long>(type: "bigint", nullable: false),
+                    BathsNum = table.Column<long>(type: "bigint", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Level = table.Column<long>(type: "bigint", nullable: false),
+                    Furnished = table.Column<bool>(type: "bit", nullable: false),
+                    VrLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DealTypeID = table.Column<long>(type: "bigint", nullable: false),
+                    SellerID = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Properties", x => x.PropertyID);
+                    table.ForeignKey(
+                        name: "FK_Properties_DealTypes_DealTypeID",
+                        column: x => x.DealTypeID,
+                        principalTable: "DealTypes",
+                        principalColumn: "DealTypeID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Properties_Sellers_SellerID",
+                        column: x => x.SellerID,
+                        principalTable: "Sellers",
+                        principalColumn: "SellerID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,7 +187,7 @@ namespace Maskan.Migrations
                     ImagesID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PropertyID = table.Column<long>(type: "bigint", nullable: true)
+                    PropertyID = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -219,13 +196,9 @@ namespace Maskan.Migrations
                         name: "FK_Images_Properties_PropertyID",
                         column: x => x.PropertyID,
                         principalTable: "Properties",
-                        principalColumn: "PropertyID");
+                        principalColumn: "PropertyID",
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Buyers_AdminID",
-                table: "Buyers",
-                column: "AdminID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryGroups_CategoryID",
@@ -258,23 +231,21 @@ namespace Maskan.Migrations
                 column: "PropertyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Properties_CountryID",
-                table: "Properties",
-                column: "CountryID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Properties_DealTypeID",
                 table: "Properties",
                 column: "DealTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sellers_AdminID",
-                table: "Sellers",
-                column: "AdminID");
+                name: "IX_Properties_SellerID",
+                table: "Properties",
+                column: "SellerID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Admins");
+
             migrationBuilder.DropTable(
                 name: "CategoryGroups");
 
@@ -291,19 +262,13 @@ namespace Maskan.Migrations
                 name: "Buyers");
 
             migrationBuilder.DropTable(
-                name: "Sellers");
-
-            migrationBuilder.DropTable(
                 name: "Properties");
 
             migrationBuilder.DropTable(
-                name: "Admins");
-
-            migrationBuilder.DropTable(
-                name: "Countries");
-
-            migrationBuilder.DropTable(
                 name: "DealTypes");
+
+            migrationBuilder.DropTable(
+                name: "Sellers");
         }
     }
 }
