@@ -14,14 +14,11 @@ namespace Maskan.Models
         public uint BathsNum { get; set; }
         [Required]
         public uint Type { get; set; }
-        [Required]
-        public uint Level { get; set; }
-        [Required]
+
         public uint Furnished { get; set; }
         [Required]
         public uint Region { get; set; }
-        [Required]
-        public uint DealType { get; set; }
+
     }
 }
 

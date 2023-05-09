@@ -228,24 +228,36 @@ namespace Maskan.Controllers
         }
 
         [HttpPost]
-        public MLModel1.ModelOutput PredictPrice(ModelInput property)
+        public MLModel1.ModelOutput PredictRentPrice(ModelInput property)
         {
     
             var SampleData = new MLModel1.ModelInput()
             {
-                Type = property.Type,
+                Type = 0,
                 Area = property.Area,
                 Bedrooms = property.RoomsNum,
                 Bathrooms = property.BathsNum,
-                Level = property.Level,
                 Furnished = property.Furnished,
-                Rent = property.DealType,
                 Region = property.Region
             };
             var Result = MLModel1.Predict(SampleData);
             return Result;
 	    }
+        [HttpPost]
+        public MLModel.ModelOutput PredictPurchasetPrice(ModelInput property)
+        {
 
+            var SampleData = new MLModel.ModelInput()
+            {
+                Type = 0,
+                Area = property.Area,
+                Bedrooms = property.RoomsNum,
+                Bathrooms = property.BathsNum,
+                Region = property.Region
+            };
+            var Result = MLModel.Predict(SampleData);
+            return Result;
+        }
 
 
         private bool PropertyExists(uint id)
