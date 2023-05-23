@@ -226,37 +226,38 @@ namespace Maskan.Controllers
 
             return NoContent();
         }
-
         [HttpPost]
-        public MLModel1.ModelOutput PredictRentPrice(ModelInput property)
+        public float PredictPrice(ModelInput property)
         {
-    
-            var SampleData = new MLModel1.ModelInput()
+            if (property.DealType == 0)
             {
-                Type = 0,
-                Area = property.Area,
-                Bedrooms = property.RoomsNum,
-                Bathrooms = property.BathsNum,
-                Furnished = property.Furnished,
-                Region = property.Region
-            };
-            var Result = MLModel1.Predict(SampleData);
-            return Result;
-	    }
-        [HttpPost]
-        public MLModel.ModelOutput PredictPurchasetPrice(ModelInput property)
-        {
+                var SampleData = new MLModel.ModelInput()
+                {
+                    Type = 0,
+                    Area = property.Area,
+                    Bedrooms = property.RoomsNum,
+                    Bathrooms = property.BathsNum,
+                    Region = property.Region
 
-            var SampleData = new MLModel.ModelInput()
+                };
+                var Result = MLModel.Predict(SampleData);
+                return Result.Score;
+            }
+            else
             {
-                Type = 0,
-                Area = property.Area,
-                Bedrooms = property.RoomsNum,
-                Bathrooms = property.BathsNum,
-                Region = property.Region
-            };
-            var Result = MLModel.Predict(SampleData);
-            return Result;
+
+                var SampleData = new MLModel1.ModelInput()
+                {
+                    Type = 0,
+                    Area = property.Area,
+                    Bedrooms = property.RoomsNum,
+                    Bathrooms = property.BathsNum,
+                    Region = property.Region,
+                    Furnished=property.Furnished,
+                };
+                var Result = MLModel1.Predict(SampleData);
+                return Result.Score;
+            }
         }
 
 

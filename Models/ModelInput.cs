@@ -18,6 +18,8 @@ namespace Maskan.Models
         public uint Furnished { get; set; }
         [Required]
         public uint Region { get; set; }
+        [Required]
+        public uint DealType { get; set; }
 
     }
 }
